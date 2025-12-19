@@ -1,0 +1,42 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.option-window {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.option-window-inside {
+    background: black;
+    height: 80vh;
+    width: 30vw;
+    border-radius: 10px;
+    border-color: yellow;
+    border-width: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.exit {
+    float: right;
+}
+
+.form-button {
+    background: yellow;
+    border: 2px solid rgba(0, 0, 0, 0.7);
+    border-radius: 6px;
+}
+
+.form-button:hover {
+    background: rgba(200, 200, 0);
+}

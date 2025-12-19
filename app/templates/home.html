@@ -4,23 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход</title>
+    <link rel="stylesheet" href="/static/css/home.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
-<h1 class="text-3xl font-bold mb-6">Авторизация</h1>
 
-<div>
-    <label class="block text-gray-700">Введите ваше имя:</label>
-    <input id="username" type="text" name="username" required
-           class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
-    <label class="block text-gray-700">Введите пароль:</label>
-    <input id="password" type="text" name="password" required
-           class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
+<body class="bg-gray-400 flex flex-col items-center justify-center min-h-screen p-4">
 
-    <button onclick="login()" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">
-        Войти
-    </button>
-</div>
-<script src="/static/home.js"></script>
+    <div id="register" class="register option-window hidden">
+        <div class="reg-inside option-window-inside">
+            <button onclick="showRegisterTable()" class="exit">✖</button>
+            <h1 class="text-3xl font-bold mb-6" style="margin-top: 20px; color: white;">Регистрация</h1>
+
+            <input type="text" id="username-reg" name="username-reg" placeholder="Имя пользователя" required
+                class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="password-reg" name="password-reg" placeholder="Пароль" required
+                class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="email-reg" name="email-reg" placeholder="Почта" required
+                class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
+
+            <button type="submit" onclick="register()"
+                class="w-full px-4 py-2 rounded-lg mt-4 form-button">
+                Зарегистрироваться
+            </button>
+        </div>
+    </div>
+
+    <h1 class="text-3xl font-bold mb-6">Авторизация</h1>
+
+    <div>
+        <label class="block text-gray-700">Введите ваше имя:</label>
+        <input id="username" type="text" name="username" required
+            class="w-full p-2 border border-black-800 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
+        <label class="block text-gray-700">Введите пароль:</label>
+        <input id="password" type="text" name="password" required
+            class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
+
+        <button onclick="preLogin()" class="w-full px-4 py-2 rounded-lg mt-4 form-button">
+            Войти
+        </button>
+        <button onclick="showRegisterTable()" class="w-full px-4 py-2 rounded-lg mt-4 form-button">
+            Регистрация
+        </button>
+    </div>
+    <script src="/static/home.js"></script>
 </body>
 </html>

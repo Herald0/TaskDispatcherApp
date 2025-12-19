@@ -18,6 +18,7 @@ user_router = APIRouter(
 
 @user_router.post('/login')
 async def login(user_info: UserLogin, session: AsyncSession = Depends(get_async_session)):
+    print(user_info)
     user = await session.execute(select(User).where(
         User.username == user_info.username,
         User.password == user_info.password,

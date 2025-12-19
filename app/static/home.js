@@ -1,8 +1,16 @@
-function login() {
+// document.getElementById("username").value = "n";
+// document.getElementById("password").value = "123";
+// preLogin();
+
+function preLogin() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    fetch("http://localhost:8000/user/login/", {
+    login(username, password);
+}
+
+function login(username, password) {
+    fetch("http://localhost:8000/user/login", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -37,10 +45,37 @@ function login() {
     });
 }
 
-// document.getElementById("username").value = "n";
-// document.getElementById("password").value = "123";
-// login();
+function showRegisterTable() {
+    document.getElementById('register').classList.toggle('hidden');
+}
 
-// function register() {
-//     fetch("http://localhost:8000/user/register")
-// }
+function register() {
+    const username = document.getElementById('username-reg').value;
+    const password = document.getElementById('password-reg').value;
+    const email = document.getElementById('email-reg').value;
+
+    fetch("http://localhost:8000/user/", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'username': username,
+            'password': password,
+            'email': email,
+        })
+    })
+    .then(res => {
+        if (res.status != 200) {
+            throw new Error('Register error')
+        }
+        return res.json();
+    })
+    .then(data => {
+        login(data.username, data.password);
+    })
+    .catch(error => {
+        alert('Ошибка регистрации');
+        console.log('Ошибка:', error);
+    })
+}

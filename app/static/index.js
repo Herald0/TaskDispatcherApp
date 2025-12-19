@@ -145,6 +145,8 @@ ws.onmessage = (event) => {
 };
 
 function showAddTaskTable() {
+    document.getElementById('add-title').value = '';
+    document.getElementById('add-description').value = '';
     add_task_field = document.getElementById("add-task");
     add_task_field.classList.toggle("hidden");
 }

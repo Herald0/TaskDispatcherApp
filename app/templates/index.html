@@ -8,8 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="flex flex-col items-center p-4 main" style="background: gray;">
-    <!-- Форма для добавление задачи -->
+<body class="bg-gray-500 flex flex-col items-center p-4 main">
+    <!-- Форма для добавления задачи -->
     <div id="add-task" class="add-task option-window hidden">
         <div class="add-task-inside option-window-inside">
             <button onclick="showAddTaskTable()" class="exit">✖</button>
@@ -21,7 +21,7 @@
                 class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
 
             <button type="submit" onclick="addTask()"
-                class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">
+                class="w-full px-4 py-2 rounded-lg mt-4 form-button">
                 Добавить
             </button>
             
@@ -40,7 +40,7 @@
                 class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
 
             <button type="submit" onclick="editTask()"
-                class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">
+                class="w-full text-black px-4 py-2 rounded-lg mt-4 form-button">
                 Сохранить
             </button>
             
@@ -56,13 +56,14 @@
     </div>
 
     <!-- Область задач -->
-    <div id="tasks" class="w-full max-w-lg h-96 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md">
+    <div id="tasks" style="background-color: black;"
+        class="w-full max-w-lg h-96 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md">
     </div>
 
     <!-- Кнопка "Добавьть задачу" -->
-    <div class="flex mt-4 w-full max-w-lg">
+    <div class="flex mt-4 w-full max-w-lg" style="display: flex; justify-content: right;">
         <button onclick="showAddTaskTable()"
-                class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600">
+                class="add-button">
                 Добавить
         </button>
     </div>
