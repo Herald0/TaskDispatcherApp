@@ -31,11 +31,6 @@
     float: right;
 }
 
-.inside-button {
-    border: 1px;
-    background: blue;
-}
-
 .task {
     display: flex;
     justify-content: space-between;
@@ -56,7 +51,7 @@
 .title-container {
     flex: 1;
     position: relative;
-    min-width: 0; /* Для правильного переноса текста */
+    min-width: 0;
 }
 
 .task-title {
@@ -144,4 +139,37 @@
 
 .form-button:hover {
     background: rgba(200, 200, 0);
+}
+
+.complete-task {
+    margin-right: 10px;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid black;
+    border-radius: 50%;
+    background-color: rgba(128, 128, 128, 0.8);
+    cursor: pointer;
+    position: relative;
+    border: 2px solid;
+    transition: all 0.3s ease;
+}
+
+.complete-task:hover {
+    border: 2px solid black;
+    background-color: gray;
+}
+
+.complete-task:checked {
+    background-color: chartreuse;
+}
+
+.complete-task:checked::after {
+    position: absolute;
+    content: '✓';
+    color: black;
+    margin: 0px 0px 0px 3px;
+    font-size: 16px;
+    font-weight: bold;
+    transform: translate(-10%, -18%);
 }

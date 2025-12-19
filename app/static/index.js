@@ -18,6 +18,15 @@ fetch('http://localhost:8000/task/', {
         task.className = 'task';
         task.dataset.id = data[i].id;
 
+        const checkbox = document.createElement('input');
+        checkbox.className = 'complete-task';
+        checkbox.type = 'checkbox';
+        checkbox.defaultChecked = data[i].completed;
+
+        checkbox.addEventListener('change', () => {
+            completeTask(data[i].id, checkbox.checked);
+        })
+
         const titleContainer = document.createElement('div');
         titleContainer.className = 'title-container';
         
@@ -57,6 +66,7 @@ fetch('http://localhost:8000/task/', {
         buttonsContainer.appendChild(edit_button);
         buttonsContainer.appendChild(delete_button);
         
+        task.appendChild(checkbox);
         task.appendChild(titleContainer);
         task.appendChild(buttonsContainer);
         
@@ -75,7 +85,7 @@ ws.onclose = () => {
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log('message: ', data);
-    let task = null;
+    let task, checkbox, titleContainer, buttonContainer;
 
     switch(data.type) {
         case 'ADD':
@@ -84,7 +94,15 @@ ws.onmessage = (event) => {
             task.className = 'task';
             task.dataset.id = data.id;
 
-            const titleContainer = document.createElement('div');
+            checkbox = document.createElement('input');
+            checkbox.className = 'complete-task';
+            checkbox.type = 'checkbox';
+
+            checkbox.addEventListener('change', () => {
+                completeTask(data.id, checkbox.checked);
+            })
+
+            titleContainer = document.createElement('div');
             titleContainer.className = 'title-container';
             
             const title = document.createElement('span');
@@ -104,8 +122,8 @@ ws.onmessage = (event) => {
                 description.style.display = 'none';
             });
             
-            const buttonsContainer = document.createElement('div');
-            buttonsContainer.className = 'task-buttons';
+            buttonContainer = document.createElement('div');
+            buttonContainer.className = 'task-buttons';
             
             const edit_button = document.createElement('button');
             edit_button.className = 'inside-button edit-button';
@@ -120,26 +138,31 @@ ws.onmessage = (event) => {
             titleContainer.appendChild(title);
             titleContainer.appendChild(description);
             
-            buttonsContainer.appendChild(edit_button);
-            buttonsContainer.appendChild(delete_button);
+            buttonContainer.appendChild(edit_button);
+            buttonContainer.appendChild(delete_button);
             
+            task.appendChild(checkbox);
             task.appendChild(titleContainer);
-            task.appendChild(buttonsContainer);
+            task.appendChild(buttonContainer);
             
             tasks.appendChild(task);
             break;
         case 'PUT':
-            task = document.querySelector(`[data-id='${data.id}']`).querySelectorAll('div');
-            title_container = task[0];
-            button_container = task[1];
-            title_container.querySelector('.task-title').textContent = data.title;
-            title_container.querySelector('.task-description').textContent = data.description;
-            button_container.querySelector('.edit-button').onclick = () => showEditTaskTable(data.id, data.title, data.description);
-            button_container.querySelector('.delete-button').onclick = () => showDeleteTaskTable(data.id);
+            task = document.querySelector(`[data-id='${data.id}']`);
+            titleContainer = task.querySelector('.title-container');
+            buttonContainer = task.querySelector('.task-buttons');
+            titleContainer.querySelector('.task-title').textContent = data.title;
+            titleContainer.querySelector('.task-description').textContent = data.description;
+            buttonContainer.querySelector('.edit-button').onclick = () => showEditTaskTable(data.id, data.title, data.description);
+            buttonContainer.querySelector('.delete-button').onclick = () => showDeleteTaskTable(data.id);
             break;
         case 'DELETE':
             task = document.querySelector(`[data-id='${data.id}']`);
             task.remove();
+            break;
+        case 'COMPLETE':
+            checkbox = document.querySelector(`[data-id='${data.id}'] input`);
+            checkbox.checked = data.checked;
             break;
     }
 };
@@ -261,6 +284,28 @@ function deleteTask(id) {
         ws.send(JSON.stringify({
             'type': 'DELETE',
             'id': data.id
+        }))
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    })
+}
+
+function completeTask(id, checked) {
+    fetch(`http://localhost:8000/task/?task_id=${id}&checked=${checked}`, {
+        method: 'PATCH'
+    })
+    .then(res => {
+        if (res.status != 200) {
+            throw new Error('Task not exist')
+        }
+        return res.json()
+    })
+    .then(data => {
+        ws.send(JSON.stringify({
+            'type': 'COMPLETE',
+            'id': data.id,
+            'checked': data.checked,
         }))
     })
     .catch(error => {

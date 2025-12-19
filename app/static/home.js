@@ -27,7 +27,7 @@ function login(username, password) {
         return res.json();
     })
     .then(data => {
-        fetch("http://localhost:8000/join_table/", {
+        fetch("http://localhost:8000/join_table", {
             headers: { 'Authorization': `Bearer ${data.access_token}` }
         })
         .then(response => {

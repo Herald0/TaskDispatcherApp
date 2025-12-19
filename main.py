@@ -1,7 +1,7 @@
-import random
 import uvicorn
+import logging
 
-from fastapi import Depends, FastAPI, Request, Form
+from fastapi import Depends, FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -13,6 +13,8 @@ from app.api.endpoints.websocket import ws_router
 from app.core.security import get_user_from_token
 
 
+logging.basicConfig(level=logging.INFO)
+
 app = FastAPI()
 app.include_router(task_router)
 app.include_router(user_router)
@@ -23,7 +25,7 @@ app.mount('/static', StaticFiles(directory='app/static'), 'static')
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    #allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -31,6 +33,7 @@ app.add_middleware(
 
 @app.get('/', response_class=HTMLResponse)
 async def home(request: Request):
+    logging.info('Главная страница')
     return templates.TemplateResponse('home.html', {'request': request})
 
 @app.get('/join_table', response_class=HTMLResponse)

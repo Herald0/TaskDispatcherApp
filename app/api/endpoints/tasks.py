@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
@@ -20,7 +22,8 @@ async def create_tasks(task: TaskCreate, session: AsyncSession = Depends(get_asy
     session.add(new_task)
     await session.commit()
     await session.refresh(new_task)
-
+    
+    logging.info(f'Создание новой задачи: {task}')
     return new_task
 
 @task_router.get('/', response_model=list[TaskFromDB])
@@ -32,23 +35,38 @@ async def get_tasks(session: AsyncSession = Depends(get_async_session)):
 async def change_task(task: TaskEdit, session: AsyncSession = Depends(get_async_session)):
     updated_task = await session.get(Task, task.id)
     if not updated_task:
+        logging.error(f'Ошибка при обновлении задачи: задача не найдена')
         raise HTTPException(404, detail={'message': 'Task not found'})
     
     updated_task.title = task.title
     updated_task.description = task.description
 
     await session.commit()
-
+    logging.info(f'Обновление задачи {task}')
     return {'id': task.id, 'title': task.title, 'description': task.description}
 
 @task_router.delete('/')
-async def change_task(task_id: int, session: AsyncSession = Depends(get_async_session)):
-    print(1)
+async def delete_task(task_id: int, session: AsyncSession = Depends(get_async_session)):
     task = await session.get(Task, task_id)
     if not task:
-        raise HTTPException(404, detail={'message': 'task not found'})
+        logging.error(f'Ошибка при удалении задачи: задача не найдена')
+        raise HTTPException(404, detail={'message': 'Task not found'})
 
     await session.delete(task)
     await session.commit()
-    print(2)
+
+    logging.info(f'Задача удалена: {task_id}')
     return {'id': task_id}
+
+@task_router.patch('/')
+async def complete_task(task_id: int, checked: bool, session: AsyncSession = Depends(get_async_session)):
+    task = await session.get(Task, task_id)
+    if not task:
+        logging.error(f'Ошибка при обновлении статуса задачи: задача не найдена')
+        raise HTTPException(404, detail={'message': 'Task not found'})
+    
+    task.completed = checked
+    await session.commit()
+
+    logging.info(f'Статус задачи {task_id} изменен на {checked}')
+    return {'id': task_id, 'checked': checked}

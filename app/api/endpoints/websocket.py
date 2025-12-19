@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 
@@ -13,11 +15,12 @@ class ConnectionManager:
     
     async def connect(self, websocket: WebSocket, username: str):
         await websocket.accept()
-
+        logging.info(f'Подписка пользователя "{username}" на события websocket')
         self.access_connections[username] = websocket
     
     def disconnect(self, username: str):
         if username in self.access_connections:
+            logging.info(f'Отключение пользователя "{username}" от событий websocket')
             del self.access_connections[username]
     
     async def broadcast(self, data: dict):
