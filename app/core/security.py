@@ -1,10 +1,11 @@
 import jwt
 import datetime
 
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 
 
-oauth2_scheme = OAuth2PasswordBearer('login')
+oauth2_scheme = OAuth2PasswordBearer('user/login')
 
 SECRET_KEY = '250nf79345jk'
 ALGORITHM = 'HS256'
@@ -16,7 +17,7 @@ def create_access_token(data: dict):
 
     return jwt.encode(data, SECRET_KEY, ALGORITHM)
 
-def get_user_from_token(token):
+def get_user_from_token(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload.get('sub')

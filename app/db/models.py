@@ -20,7 +20,6 @@ class User(Base):
     __tablename__ = 'User'
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, index=True)
-    firstName: Mapped[str]
-    lastName: Mapped[str]
+    username: Mapped[str] = mapped_column(unique=True)
     email: Mapped[str] = mapped_column(unique=True)
-    password: Mapped[str] = mapped_column(unique=True)
+    password: Mapped[str]

@@ -3,34 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Чат на WebSocket - Комната {{ room_id }}</title>
+    <title>Список задач</title>
+    <link rel="stylesheet" href="/static/css/index.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex flex-col items-center p-4">
-<h1 class="text-2xl font-bold mb-4">Чат на WebSocket - Комната {{ room_id }}</h1>
 
-<!-- Скрытый элемент для хранения данных комнаты -->
-<div id="room-data"
-     data-username="{{ username }}"
-     data-user-id="{{ user_id }}"
-     class="hidden">
-</div>
+<body class="flex flex-col items-center p-4 main" style="background: gray;">
+    <!-- Форма для добавление задачи -->
+    <div id="add-task" class="add-task option-window hidden">
+        <div class="add-task-inside option-window-inside">
+            <button onclick="showAddTaskTable()" class="exit">✖</button>
+            <h1 class="text-3xl font-bold mb-6" style="margin-top: 20px; color: white;">Добавить задачу</h1>
 
-<!-- Область сообщений -->
-<div id="messages"
-     class="w-full max-w-lg h-96 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md">
-</div>
+            <input type="text" id="add-title" name="title" placeholder="Название" required
+                class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="add-description" name="description" placeholder="Описание" required
+                class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
 
-<!-- Поле ввода и кнопка -->
-<div class="flex mt-4 w-full max-w-lg">
-    <input id="messageInput"
-           type="text"
-           placeholder="Введите сообщение"
-           class="flex-1 p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-    <button onclick="sendMessage()"
-            class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600">Отправить
-    </button>
-</div>
-<script src="/static/index.js"></script>
+            <button type="submit" onclick="addTask()"
+                class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">
+                Добавить
+            </button>
+            
+        </div>
+    </div>
+
+    <!-- Форма для изменения задачи задачи -->
+    <div id="edit-task" class="edit-task option-window hidden">
+        <div class="add-task-inside option-window-inside">
+            <button onclick="showEditTaskTable()" class="exit">✖</button>
+            <h1 class="text-3xl font-bold mb-6" style="margin-top: 20px; color: white;">Редактировать задачу</h1>
+
+            <input type="text" id="edit-title" name="title" placeholder="Название" required
+                class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="edit-description" name="description" placeholder="Описание" required
+                class="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500">
+
+            <button type="submit" onclick="editTask()"
+                class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">
+                Сохранить
+            </button>
+            
+        </div>
+    </div>
+
+    <h1 class="text-2xl font-bold mb-4">Список задач</h1>
+
+    <!-- Скрытый элемент для хранения username -->
+    <div id="room-data"
+        data-username="{{ username }}"
+        class="hidden">
+    </div>
+
+    <!-- Область задач -->
+    <div id="tasks" class="w-full max-w-lg h-96 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md">
+    </div>
+
+    <!-- Кнопка "Добавьть задачу" -->
+    <div class="flex mt-4 w-full max-w-lg">
+        <button onclick="showAddTaskTable()"
+                class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600">
+                Добавить
+        </button>
+    </div>
+    <script src="/static/index.js"></script>
 </body>
+
 </html>
