@@ -25,7 +25,6 @@ app.mount('/static', StaticFiles(directory='app/static'), 'static')
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    #allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -33,16 +32,11 @@ app.add_middleware(
 
 @app.get('/', response_class=HTMLResponse)
 async def home(request: Request):
-    logging.info('Главная страница')
-    return templates.TemplateResponse('home.html', {'request': request})
+    return templates.TemplateResponse(request, 'home.html')
 
 @app.get('/join_table', response_class=HTMLResponse)
 async def join_table(request: Request, username: str = Depends(get_user_from_token)):
-    return templates.TemplateResponse('index.html', {
-        'request': request,
+    return templates.TemplateResponse(request, 'index.html', {
         'username': username
     })
-
-if __name__ == '__main__':
-    uvicorn.run(app="main:app", port=8000)
     

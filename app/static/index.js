@@ -6,7 +6,7 @@ let currentId = null;
 
 const ws = new WebSocket(`ws://localhost:8000/ws/table/?username=${username}`);
 
-fetch('http://localhost:8000/task/', {
+fetch('http://localhost:8000/tasks/', {
     method: 'GET'
 })
 .then(res => res.json())
@@ -198,7 +198,7 @@ function addTask() {
     }
     const description = document.getElementById("add-description").value;
 
-    fetch("http://localhost:8000/task/", {
+    fetch("http://localhost:8000/tasks/", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -238,7 +238,7 @@ function editTask() {
     }
     const description = document.getElementById("edit-description").value;
 
-    fetch("http://localhost:8000/task/", {
+    fetch("http://localhost:8000/tasks/", {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -271,7 +271,7 @@ function editTask() {
 }
 
 function deleteTask(id) {
-    fetch(`http://localhost:8000/task/?task_id=${id}`, {
+    fetch(`http://localhost:8000/tasks/?task_id=${id}`, {
         method: 'DELETE'
     })
     .then(res => {
@@ -292,7 +292,7 @@ function deleteTask(id) {
 }
 
 function completeTask(id, checked) {
-    fetch(`http://localhost:8000/task/?task_id=${id}&checked=${checked}`, {
+    fetch(`http://localhost:8000/tasks/?task_id=${id}&checked=${checked}`, {
         method: 'PATCH'
     })
     .then(res => {

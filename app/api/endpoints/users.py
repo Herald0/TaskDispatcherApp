@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -13,8 +13,8 @@ from app.db.database import get_async_session
 
 
 user_router = APIRouter(
-    prefix='/user',
-    tags=['User']
+    prefix='/users',
+    tags=['Users']
 )
 
 
@@ -25,7 +25,7 @@ async def login(user_info: UserLogin, session: AsyncSession = Depends(get_async_
         User.password == user_info.password,
     ))
     if not user.scalars().all():
-        logging.error('Ошибка при регистрации: Пользователь уже существует')
+        logging.error('Ошибка при регистрации: Пользователь не найден')
         raise HTTPException(404, detail={'message': 'user not found'})
 
     logging.info(f'Вход в аккаунт: {user_info.username}')
@@ -37,12 +37,13 @@ async def register(user: UserReg, session: AsyncSession = Depends(get_async_sess
     search_user = await session.execute(select(User).where(User.username == user.username))
     if search_user.scalars().all():
         logging.error('Ошибка при регистрации: Пользователь уже существует')
-        raise HTTPException(400, detail={'message': 'User already exists'})
+        raise HTTPException(401, detail={'message': 'User already exists'})
     
     new_user = User(**user.model_dump())
 
     session.add(new_user)
     await session.commit()
     await session.refresh(new_user)
+    
     logging.info(f'Зарегистрирован новый пользователь: {new_user}')
     return new_user

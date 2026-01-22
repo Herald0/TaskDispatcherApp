@@ -2,7 +2,7 @@ import logging
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, delete
+from sqlalchemy import select
 
 from app.api.schemas.task import TaskCreate, TaskEdit, TaskFromDB
 from app.db.models import Task
@@ -10,13 +10,13 @@ from app.db.database import get_async_session
 
 
 task_router = APIRouter(
-    prefix='/task',
-    tags=['Task']
+    prefix='/tasks',
+    tags=['Tasks']
 )
 
 
 @task_router.post('/', response_model=TaskFromDB)
-async def create_tasks(task: TaskCreate, session: AsyncSession = Depends(get_async_session)):
+async def create_task(task: TaskCreate, session: AsyncSession = Depends(get_async_session)):
     new_task = Task(**task.model_dump())
 
     session.add(new_task)

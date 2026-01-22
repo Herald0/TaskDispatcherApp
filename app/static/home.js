@@ -10,7 +10,7 @@ function preLogin() {
 }
 
 function login(username, password) {
-    fetch("http://localhost:8000/user/login", {
+    fetch("http://localhost:8000/users/login", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ function register() {
     const password = document.getElementById('password-reg').value;
     const email = document.getElementById('email-reg').value;
 
-    fetch("http://localhost:8000/user/", {
+    fetch("http://localhost:8000/users/", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
